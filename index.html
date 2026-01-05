@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playdate Hub | A Tiny Handheld Gaming Archive</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --playdate-yellow: #ffcc00;
+            --playdate-dark: #2c2c2c;
+            --playdate-text: #1a1a1a;
+            --playdate-screen: #b1b59f;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f4f4f4;
+            color: var(--playdate-text);
+            scroll-behavior: auto;
+        }
+
+        .bg-playdate { background-color: var(--playdate-yellow); }
+        .text-playdate { color: var(--playdate-yellow); }
+        .border-playdate { border-color: var(--playdate-yellow); }
+
+        .hero-pattern {
+            background-color: #ffcc00;
+            background-image: radial-gradient(var(--playdate-dark) 0.5px, transparent 0.5px);
+            background-size: 20px 20px;
+        }
+
+        /* News Ticker */
+        .ticker-wrap {
+            width: 100%;
+            overflow: hidden;
+            background-color: var(--playdate-dark);
+            color: white;
+            padding: 8px 0;
+            border-bottom: 4px solid black;
+        }
+
+        .ticker {
+            display: inline-block;
+            white-space: nowrap;
+            padding-right: 100%;
+            animation: ticker 30s linear infinite;
+            font-size: 12px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        @keyframes ticker {
+            0% { transform: translate3d(0, 0, 0); visibility: visible; }
+            100% { transform: translate3d(-100%, 0, 0); }
+        }
+
+        /* Subtle Corner Crank UI */
+        #sideCrank {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 80px;
+            height: 80px;
+            z-index: 1000;
+            pointer-events: none;
+            background: var(--playdate-dark);
+            border: 3px solid black;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+        }
+
+        .crank-arm {
+            transform-origin: center;
+        }
+
+        .game-card {
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid black;
+        }
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 12px 12px 0px var(--playdate-dark);
+        }
+
+        /* 1-Bit Screen Effect */
+        .screen-1bit {
+            background-color: var(--playdate-screen);
+            background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAIklEQVQIW2NkQAKrVq36zwjjgzhh2uGAA5AemBEyEK4EBADfDwwCt4FaywAAAABJRU5ErkJggg==");
+            image-rendering: pixelated;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .page-content {
+            display: none;
+            animation: slideUp 0.4s ease-out forwards;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .nav-link.active {
+            color: var(--playdate-yellow) !important;
+            background: var(--playdate-dark) !important;
+            padding: 0.5rem 1.25rem !important;
+            border-radius: 12px !important;
+            transform: rotate(-2deg);
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #666;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: 900;
+            text-transform: uppercase;
+        }
+
+        .perspective-1000 { perspective: 1000px; }
+        
+        .podcast-item {
+            transition: all 0.2s ease;
+        }
+        .podcast-item:hover {
+            background-color: #1a1a1a;
+            transform: translateX(5px);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- News Ticker -->
+    <div class="ticker-wrap">
+        <div class="ticker">
+            NEWS: Season 2 is now officially archiving... | CRANK UPDATE: Pivot hinge lubricated and ready for rapid rotation... | CATALOG SPOTLIGHT: Mars After Midnight continues to charm Martians worldwide... | PODCAST: The Official Playdate Podcast is live with Season 2 interviews! | SYSTEM STATUS: 1-Bit Graphics at 100% capacity... | UNLOCK: Find the hidden bunny icon for extra luck!
+        </div>
+    </div>
+
+    <!-- Mechanical Corner Crank -->
+    <div id="sideCrank" class="hidden lg:flex">
+        <svg width="60" height="60" viewBox="0 0 100 100">
+            <g id="mainCrankArm" class="crank-arm">
+                <rect x="40" y="10" width="20" height="40" rx="10" fill="#ffcc00" stroke="black" stroke-width="4" />
+                <circle cx="50" cy="15" r="12" fill="#2c2c2c" stroke="black" stroke-width="4" />
+                <circle cx="50" cy="15" r="4" fill="#ffcc00" />
+            </g>
+            <circle cx="50" cy="50" r="10" fill="#2c2c2c" stroke="black" stroke-width="4" />
+        </svg>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white border-b-4 border-black p-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateTo('home')">
+                <div class="w-12 h-12 bg-playdate border-4 border-black rounded-xl flex items-center justify-center overflow-hidden transition-transform group-hover:rotate-12">
+                    <!-- Unofficial Bunny Mascot SVG (Cranky the Bunny) -->
+                    <svg class="w-10 h-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M30 40C30 20 40 10 40 10L45 35" stroke="black" stroke-width="6" stroke-linecap="round"/>
+                        <path d="M70 40C70 20 60 10 60 10L55 35" stroke="black" stroke-width="6" stroke-linecap="round"/>
+                        <rect x="25" y="35" width="50" height="45" rx="15" fill="black"/>
+                        <circle cx="40" cy="50" r="4" fill="#ffcc00"/>
+                        <circle cx="60" cy="50" r="4" fill="#ffcc00"/>
+                        <path d="M45 65C45 65 50 68 55 65" stroke="#ffcc00" stroke-width="3" stroke-linecap="round"/>
+                        <circle class="nav-crank-icon" cx="85" cy="60" r="8" fill="#ffcc00" stroke="black" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-black tracking-tighter uppercase">Playdate <span class="text-playdate bg-black px-1">HUB</span></h1>
+            </div>
+            <div class="hidden md:flex gap-4 font-bold uppercase text-xs tracking-widest items-center">
+                <button onclick="navigateTo('home')" id="btn-home" class="nav-link hover:bg-gray-100 p-2 rounded-lg transition-all active">Home</button>
+                <button onclick="navigateTo('season1')" id="btn-season1" class="nav-link hover:bg-gray-100 p-2 rounded-lg transition-all">Season 1</button>
+                <button onclick="navigateTo('season2')" id="btn-season2" class="nav-link hover:bg-gray-100 p-2 rounded-lg transition-all">Season 2</button>
+                <button onclick="navigateTo('catalog')" id="btn-catalog" class="nav-link hover:bg-gray-100 p-2 rounded-lg transition-all">Catalog</button>
+                <a href="https://play.date" target="_blank" class="bg-black text-white px-6 py-2 rounded-xl hover:bg-playdate hover:text-black transition-all border-2 border-black">Get Unit</a>
+            </div>
+            <button class="md:hidden text-2xl font-black" onclick="toggleMenu()">☰</button>
+        </div>
+    </nav>
+
+    <!-- Floating Randomizer -->
+    <div class="fixed bottom-8 left-8 z-40">
+        <button onclick="pickRandomGame()" class="bg-black border-4 border-black p-4 rounded-2xl shadow-[6px_6px_0px_#ffcc00] hover:translate-x-1 hover:translate-y-1 hover:shadow-none transition-all group flex items-center gap-3 text-white">
+            <svg id="randomCrank" class="w-8 h-8 text-playdate" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M12 12L18 6"></path>
+            </svg>
+            <span class="font-black uppercase text-xs tracking-widest hidden group-hover:block">Surprise Crank</span>
+        </button>
+    </div>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page-content active">
+        <header class="hero-pattern py-20 px-6 border-b-8 border-black">
+            <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
+                <div class="flex-1 text-center lg:text-left">
+                    <div class="flex items-center justify-center lg:justify-start gap-4 mb-4">
+                        <div class="bg-black text-white px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest">Mainframe v2.3</div>
+                        <div class="text-2xl" title="Cranky the Bunny">🐰</div>
+                    </div>
+                    <h2 class="text-6xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter italic">Crank up the <br><span class="text-white bg-black px-4 not-italic">Archive.</span></h2>
+                    <p class="text-2xl font-bold mb-10 max-w-xl opacity-80 leading-snug">The world's first interactive archive for Seasons 1 & 2. Every twist and turn of the Playdate journey, collected right here for your tiny screen.</p>
+                    <div class="flex flex-wrap justify-center lg:justify-start gap-6">
+                        <button onclick="navigateTo('season1')" class="bg-black text-white text-xl font-black px-10 py-5 rounded-2xl hover:bg-playdate hover:text-black transition-all border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.2)]">Open Season 1</button>
+                        <button onclick="navigateTo('season2')" class="bg-white text-black text-xl font-black px-10 py-5 rounded-2xl hover:bg-playdate transition-all border-4 border-black shadow-[8px_8px_0px_rgba(0,0,0,0.2)]">Open Season 2</button>
+                    </div>
+                </div>
+                <div class="flex-1 w-full">
+                    <div class="bg-white border-4 border-black p-8 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] rotate-1 relative overflow-hidden">
+                        <div class="flex items-center gap-4 mb-6 relative z-10">
+                            <div id="factIcon" class="w-16 h-16 bg-playdate border-4 border-black rounded-2xl flex items-center justify-center text-3xl transition-all duration-300">⚙️</div>
+                            <div>
+                                <h4 id="factLabel" class="text-xl font-black uppercase tracking-tighter">Mechanical Tip #1</h4>
+                                <p class="text-xs font-bold opacity-50 uppercase">Daily Neighborhood Wisdom</p>
+                            </div>
+                        </div>
+                        <p id="factDisplay" class="text-xl font-bold italic mb-6 relative z-10">The Playdate crank is a hall-effect sensor, meaning it uses magnets to detect rotation without physical contact!</p>
+                        <div class="flex justify-between items-center relative z-10">
+                            <span class="text-[10px] font-black uppercase bg-gray-100 px-3 py-1 rounded-full">Stay Yellow</span>
+                            <button onclick="rotateFact()" class="text-[10px] font-black underline hover:text-playdate">GIVE ME ANOTHER</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- System Index -->
+        <section class="py-24 px-6 max-w-6xl mx-auto">
+            <h3 class="text-4xl font-black uppercase mb-12 text-center">System Index</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-white border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4">📂</div>
+                    <h4 class="text-3xl font-black uppercase mb-2">Archive: S1</h4>
+                    <p class="font-bold opacity-60 mb-6">24 free games delivered wirelessy. The original collection.</p>
+                    <button onclick="navigateTo('season1')" class="font-black bg-playdate border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Explore Season 1</button>
+                </div>
+                <div class="bg-playdate border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4">🆕</div>
+                    <h4 class="text-3xl font-black uppercase mb-2">Archive: S2</h4>
+                    <p class="font-bold mb-6 italic text-sm">Season 2 titles have landed! 13 all-new games are here.</p>
+                    <button onclick="navigateTo('season2')" class="font-black bg-black text-white border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Explore Season 2</button>
+                </div>
+                <div class="bg-white border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
+                    <div class="text-6xl mb-4">🎙️</div>
+                    <h4 class="text-3xl font-black uppercase mb-2">The Audio</h4>
+                    <p class="font-bold opacity-60 mb-6">Listen to the official Playdate Podcast for dev stories.</p>
+                    <a href="https://podcast.play.date/" target="_blank" class="font-black bg-playdate border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Listen to Podcast</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Podcast Audio Station -->
+        <section class="bg-black text-white py-24 px-6 border-y-8 border-playdate">
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+                <div class="flex-1 text-center md:text-left">
+                    <div class="text-playdate font-black text-xs uppercase mb-4 tracking-widest">Official Broadcast</div>
+                    <h3 class="text-5xl font-black uppercase mb-6 leading-none tracking-tighter">The Playdate <br>Podcast.</h3>
+                    <p class="text-xl opacity-70 mb-8">Go behind the scenes with Christa Mrgan as she explores the making of the world's crankiest handheld. Featuring interviews with Lucas Pope, Keita Takahashi, and the Panic team.</p>
+                    <div class="flex flex-wrap justify-center md:justify-start gap-4">
+                        <a href="https://podcast.play.date/" target="_blank" class="bg-playdate text-black font-black px-8 py-4 rounded-xl hover:bg-white transition-all">Latest Episodes</a>
+                    </div>
+                </div>
+                <div class="flex-1 w-full bg-playdate p-2 rounded-3xl border-4 border-white shadow-2xl">
+                    <div class="bg-black p-6 rounded-2xl flex flex-col gap-4">
+                        <a href="https://podcast.play.date/episodes/s2-official-launch/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
+                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#32</div>
+                            <div class="font-black uppercase text-sm">Season 2 officially lands!</div>
+                        </a>
+                        <a href="https://podcast.play.date/episodes/lucas-pope/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
+                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#31</div>
+                            <div class="font-black uppercase text-sm">Lucas Pope: Mars After Midnight</div>
+                        </a>
+                        <a href="https://podcast.play.date/episodes/zach-gage/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
+                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#30</div>
+                            <div class="font-black uppercase text-sm">Zach Gage: Puzzmo & Daily Games</div>
+                        </a>
+                        <a href="https://podcast.play.date/episodes/teenage-engineering/" target="_blank" class="podcast-item flex items-center gap-4">
+                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#29</div>
+                            <div class="font-black uppercase text-sm">Hardware design with TE</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- SEASON 1 PAGE -->
+    <div id="season1" class="page-content">
+        <div class="bg-black text-white py-20 px-6 text-center">
+            <h2 class="text-7xl font-black uppercase tracking-tighter italic">Season One</h2>
+            <div class="h-2 w-32 bg-playdate mx-auto mt-4"></div>
+        </div>
+        <div class="max-w-7xl mx-auto py-20 px-6">
+            <div id="season1Grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+        </div>
+    </div>
+
+    <!-- SEASON 2 PAGE -->
+    <div id="season2" class="page-content">
+        <div class="bg-playdate py-20 px-6 text-center border-b-8 border-black">
+            <h2 class="text-7xl font-black uppercase tracking-tighter">Season Two</h2>
+            <p class="font-black uppercase tracking-widest mt-4 italic">The Complete 2025 Archive</p>
+        </div>
+        <div class="max-w-7xl mx-auto py-20 px-6">
+            <div id="season2Grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
+        </div>
+    </div>
+
+    <!-- CATALOG PAGE -->
+    <div id="catalog" class="page-content">
+        <div class="bg-white py-20 px-6 text-center border-b-8 border-black">
+            <h2 class="text-7xl font-black uppercase tracking-tighter italic">The Catalog</h2>
+            <p class="font-black uppercase tracking-widest text-gray-400">The Ultimate Boutique Storefront Selection</p>
+        </div>
+        <div class="max-w-7xl mx-auto py-20 px-6">
+            <div id="catalogGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8"></div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-200 py-24 px-6 border-t-8 border-black">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex justify-center mb-8">
+                <svg width="60" height="60" viewBox="0 0 100 100">
+                    <path d="M30 40C30 20 40 10 40 10" stroke="black" stroke-width="6"/>
+                    <path d="M70 40C70 20 60 10 60 10" stroke="black" stroke-width="6"/>
+                    <rect x="25" y="35" width="50" height="45" rx="15" fill="black"/>
+                </svg>
+            </div>
+            <h1 class="text-5xl font-black uppercase mb-8">Stay Yellow.</h1>
+            <div class="flex justify-center gap-8 mb-12 flex-wrap font-black uppercase text-sm">
+                <button onclick="navigateTo('home')" class="hover:text-playdate">Home</button>
+                <button onclick="navigateTo('season1')" class="hover:text-playdate">Season 1</button>
+                <button onclick="navigateTo('season2')" class="hover:text-playdate">Season 2</button>
+                <button onclick="navigateTo('catalog')" class="hover:text-playdate">Catalog</button>
+            </div>
+            <p class="text-gray-500 font-bold uppercase text-[10px] tracking-[0.3em]">Unofficial Playdate Gaming Hub. Created by fans, for fans. 🐰</p>
+        </div>
+    </footer>
+
+    <!-- GAME MODAL -->
+    <div id="gameModal" class="modal" onclick="closeGame()">
+        <div class="w-full max-w-[480px] m-4 relative perspective-1000" onclick="event.stopPropagation()">
+            <div id="cardFront" class="bg-white rounded-[32px] border-[8px] border-black shadow-[20px_20px_0px_rgba(0,0,0,1)] overflow-hidden flex flex-col p-6 min-h-[640px]">
+                <div class="flex justify-between items-start mb-6">
+                    <div>
+                        <h2 id="modalTitle" class="text-4xl font-black uppercase leading-[0.85] tracking-tighter mb-1">Title</h2>
+                        <p id="modalDev" class="text-xs font-black uppercase opacity-50">Developer Name</p>
+                    </div>
+                    <div id="modalLabel" class="bg-black text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase">S1-W1</div>
+                </div>
+                <div class="screen-1bit w-full aspect-[400/240] rounded-xl border-4 border-black mb-6 flex items-center justify-center overflow-hidden relative">
+                    <div id="screenshotVisual" class="scale-150 opacity-40"></div>
+                </div>
+                <div class="flex-grow">
+                    <h5 class="stat-label mb-2 border-b-2 border-gray-100 pb-1">Archive Data</h5>
+                    <p id="modalDesc" class="text-xl font-bold leading-tight mb-6 italic">Description</p>
+                </div>
+                <div class="bg-gray-100 rounded-2xl p-4 grid grid-cols-2 gap-4 border-2 border-black mb-4">
+                    <div>
+                        <div class="stat-label">Genre</div>
+                        <div id="modalGenre" class="stat-value">Action</div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Crank Usage</div>
+                        <div id="modalCrank" class="stat-value">High</div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Archive ID</div>
+                        <div id="modalRank" class="stat-value">#01</div>
+                    </div>
+                    <div>
+                        <div class="stat-label">Platform</div>
+                        <div class="stat-value">PLAYDATE</div>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <a id="modalLink" href="#" target="_blank" class="flex-1 bg-playdate text-black text-center font-black py-4 rounded-2xl uppercase tracking-widest hover:bg-black hover:text-white border-4 border-black transition-all">Go to Store</a>
+                    <button onclick="closeGame()" class="flex-1 bg-black text-white font-black py-4 rounded-2xl uppercase tracking-widest hover:bg-gray-800 transition-all border-4 border-black">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Exactly 100 Mechanical Tips
+        const facts = [
+            { text: "The Playdate crank is a hall-effect sensor, using magnets to detect rotation without physical contact!", icon: "🧲", color: "text-blue-500" },
+            { text: "Panic is based in Portland, Oregon, and they're also the creators of Transmit and Firewatch!", icon: "🌲", color: "text-green-600" },
+            { text: "The screen is a Sharp Memory LCD, which is highly reflective and doesn't have a backlight!", icon: "✨", color: "text-yellow-500" },
+            { text: "Developers often use 'Pulp', a web-based game maker designed specifically for Playdate creators.", icon: "🎨", color: "text-purple-500" },
+            { text: "The CPU is a 168MHz Cortex M7. That's a lot of power for 1-bit graphics!", icon: "🧠", color: "text-indigo-500" },
+            { text: "The crank was designed in collaboration with Teenage Engineering in Sweden.", icon: "🇸🇪", color: "text-blue-400" },
+            { text: "Every Playdate console is a development kit. Just plug it in and start coding.", icon: "🛠️", color: "text-amber-600" },
+            { text: "The screen resolution is 400x240 pixels. Crisp 1-bit perfection.", icon: "📐", color: "text-emerald-500" },
+            { text: "Playdate Mirror is a free app that lets you stream your Playdate screen to your PC.", icon: "🖥️", color: "text-sky-500" },
+            { text: "You can sideload games onto Playdate via a simple drag-and-drop on the Playdate website.", icon: "📂", color: "text-orange-500" },
+            { text: "A Hall Effect sensor never wears out because there's no friction mechanism inside.", icon: "⚙️", color: "text-zinc-600" },
+            { text: "Most Playdate games are under 5MB in size. Small but mighty!", icon: "🤏", color: "text-blue-300" },
+            { text: "The name 'Playdate' implies a scheduled fun meeting—hence the seasonal delivery.", icon: "📅", color: "text-blue-700" },
+            { text: "The yellow finish is matte-textured to prevent fingerprints and glint.", icon: "🖐️", color: "text-yellow-400" },
+            { text: "Cranking slowly vs cranking fast can be detected by hardware.", icon: "🏃", color: "text-amber-500" },
+            { text: "Playdate has 16MB of RAM. Tight constraints, big ideas.", icon: "💾", color: "text-gray-500" },
+            { text: "Keita Takahashi designed the Katamari games and Crankin's Adventure.", icon: "🌈", color: "text-red-400" },
+            { text: "You can find thousands of free games on Itch.io for Playdate.", icon: "🎮", color: "text-red-600" },
+            { text: "The Playdate Simulator is available for Mac, Windows, and Linux.", icon: "💻", color: "text-blue-600" },
+            { text: "USB-C charging takes about 2 hours for a full cycle.", icon: "🔌", color: "text-orange-500" },
+            { text: "The battery can last for weeks in standby mode as a desk clock.", icon: "🔋", color: "text-green-400" },
+            { text: "The D-pad is remarkably precise for retro-style movements.", icon: "🔘", color: "text-slate-800" },
+            { text: "Season 1 consisted of 24 games across 12 weeks.", icon: "📅", color: "text-blue-400" },
+            { text: "Teenage Engineering is known for high-end synthesizers like the OP-1.", icon: "🎹", color: "text-purple-400" },
+            { text: "Playdate's 'A' and 'B' buttons are very clicky and tactile.", icon: "🔘", color: "text-gray-700" },
+            { text: "The crank is technically the 'Third Axis' of the D-pad.", icon: "🔄", color: "text-blue-500" },
+            { text: "Keita Takahashi's intro animation is a work of art.", icon: "🎨", color: "text-pink-400" },
+            { text: "The console is exactly 76mm × 74mm × 9mm.", icon: "📏", color: "text-gray-500" },
+            { text: "The back screws are visible on purpose for that 'kit' look.", icon: "🔩", color: "text-zinc-800" },
+            { text: "The battery filling animation is a fan favorite detail.", icon: "🥤", color: "text-yellow-600" },
+            { text: "Most developers prefer Lua because it's so easy to learn.", icon: "🌙", color: "text-blue-900" },
+            { text: "C can be used for high-performance physics-heavy games.", icon: "⌨️", color: "text-teal-600" },
+            { text: "The Playdate Hub is unofficial and made for the love of the game.", icon: "🐰", color: "text-playdate" },
+            { text: "You can find 'Cranky the Bunny' hidden in the footer!", icon: "🕵️", color: "text-pink-500" },
+            { text: "The screen is so sharp you can read 8pt text easily.", icon: "👓", color: "text-slate-600" },
+            { text: "Panic used to be a Mac-only software company.", icon: "🍎", color: "text-slate-400" },
+            { text: "Firewatch was a massive hit that funded this hardware project.", icon: "🔥", color: "text-orange-600" },
+            { text: "The Swedish designers at TE are legendary for minimalism.", icon: "🇸🇪", color: "text-blue-300" },
+            { text: "The crank hinge is rated for hundreds of thousands of turns.", icon: "🔄", color: "text-yellow-700" },
+            { text: "There is a secret Developer Menu in the settings.", icon: "🔒", color: "text-red-600" },
+            { text: "Playdate doesn't have a backlight, so play in the sun!", icon: "☀️", color: "text-yellow-500" },
+            { text: "The screen uses a 'Memory' crystal structure to hold pixels.", icon: "🧠", color: "text-emerald-500" },
+            { text: "Dithering creates the illusion of gray on a 2-color screen.", icon: "🏁", color: "text-gray-700" },
+            { text: "Panic's Transmit app features a truck icon.", icon: "🚚", color: "text-blue-500" },
+            { text: "The crank is the soul of the machine.", icon: "💛", color: "text-playdate" },
+            { text: "Playdate games are stored in .pdx folders.", icon: "📂", color: "text-amber-700" },
+            { text: "The 'A' button is for action, 'B' is for back.", icon: "🔘", color: "text-slate-800" },
+            { text: "There are no microtransactions on the platform.", icon: "🚫", color: "text-red-500" },
+            { text: "The Catalog launched in early 2023.", icon: "🛍️", color: "text-pink-500" },
+            { text: "The crank sensor is incredibly precise for minute adjustments.", icon: "🎯", color: "text-red-400" },
+            { text: "Stay curious, stay cranky, stay yellow.", icon: "💛", color: "text-yellow-400" },
+            { text: "Take breaks! Every 20 minutes, look at something 20 feet away.", icon: "☕", color: "text-orange-600" },
+            { text: "You are the heart of the Playdate community.", icon: "❤️", color: "text-red-600" },
+            { text: "The Playdate 'Logo' font is a custom variant of Roobert.", icon: "🔤", color: "text-black" },
+            { text: "Panic worked on the hardware for over 4 years before reveal.", icon: "⏳", color: "text-zinc-500" },
+            { text: "The Playdate community is one of the friendliest in gaming.", icon: "🤝", color: "text-pink-400" },
+            { text: "The standby clock can be customized with Faces.", icon: "🕙", color: "text-indigo-600" },
+            { text: "The Hall Effect sensor works by measuring magnetic field strength.", icon: "🔬", color: "text-cyan-600" },
+            { text: "Every Playdate console is a development kit out of the box.", icon: "🛠️", color: "text-amber-600" },
+            { text: "The speaker is Mono but headphones support Stereo.", icon: "🔊", color: "text-violet-500" },
+            { text: "Pulp uses a 'tile-based' approach for game design.", icon: "🧱", color: "text-orange-600" },
+            { text: "The crank handle folds flush into the side of the device.", icon: "📎", color: "text-gray-400" },
+            { text: "Playdate supports high-fidelity WAV audio files.", icon: "🎵", color: "text-indigo-600" },
+            { text: "The battery can last for 8 hours of active play.", icon: "🔋", color: "text-green-500" },
+            { text: "A lanyard hole is located in the bottom corner.", icon: "🧶", color: "text-purple-400" },
+            { text: "Panic's headquarters is in Portland, Oregon.", icon: "🗺️", color: "text-green-700" },
+            { text: "The Swedish designers at TE are legendary.", icon: "🇸🇪", color: "text-blue-500" },
+            { text: "The Hall Effect sensor is immune to 'Crank Drift'.", icon: "🛡️", color: "text-blue-400" },
+            { text: "The console weighs only 86 grams.", icon: "⚖️", color: "text-gray-300" },
+            { text: "Panic used to be a Mac-only software company.", icon: "🍎", color: "text-slate-400" },
+            { text: "The crank hinge is rated for longevity.", icon: "🔄", color: "text-yellow-700" },
+            { text: "There is a secret Developer Menu in settings.", icon: "🔒", color: "text-red-600" },
+            { text: "The SDK is written in C and Lua.", icon: "⚙️", color: "text-zinc-600" },
+            { text: "Playdate doesn't have a backlight.", icon: "☀️", color: "text-yellow-500" },
+            { text: "The screen resolution is 400x240.", icon: "📐", color: "text-emerald-500" },
+            { text: "Dithering creates the illusion of gray.", icon: "🏁", color: "text-gray-700" },
+            { text: "The Playdate font is called Roobert.", icon: "🔤", color: "text-gray-900" },
+            { text: "You can charge and play at the same time.", icon: "⚡", color: "text-cyan-500" },
+            { text: "The device features a mono speaker.", icon: "🔊", color: "text-zinc-600" },
+            { text: "The crank is the soul of the machine.", icon: "💛", color: "text-playdate" },
+            { text: "Playdate games are .pdx folders.", icon: "📂", color: "text-amber-700" },
+            { text: "The 'A' button is for action.", icon: "🔘", color: "text-slate-800" },
+            { text: "There are no ads on the platform.", icon: "🚫", color: "text-red-500" },
+            { text: "The Catalog launched in 2023.", icon: "🛍️", color: "text-pink-500" },
+            { text: "The crank sensor is very precise.", icon: "🎯", color: "text-red-400" },
+            { text: "The unofficial mascot is Cranky.", icon: "🐰", color: "text-playdate" },
+            { text: "Playdate supports tile-mapping.", icon: "🗺️", color: "text-emerald-500" },
+            { text: "The Hall Effect sensor is reliable.", icon: "🛡️", color: "text-blue-400" },
+            { text: "The console is light.", icon: "⚖️", color: "text-gray-300" },
+            { text: "Firewatch funded this.", icon: "🔥", color: "text-orange-600" },
+            { text: "TE designed the look.", icon: "🇸🇪", color: "text-blue-300" },
+            { text: "The hinge is sturdy.", icon: "🔄", color: "text-yellow-700" },
+            { text: "Lua is easy to learn.", icon: "🌙", color: "text-blue-900" },
+            { text: "C is for power.", icon: "⌨️", color: "text-teal-600" },
+            { text: "The Hub is for fans.", icon: "🐰", color: "text-playdate" },
+            { text: "Cranking is mechanical.", icon: "⚙️", color: "text-gray-500" },
+            { text: "Screen is reflective.", icon: "🪞", color: "text-blue-200" },
+            { text: "USB-C is universal.", icon: "⚡", color: "text-cyan-500" },
+            { text: "Mono speaker is loud.", icon: "🔊", color: "text-violet-500" },
+            { text: "Playdate is tiny.", icon: "🤏", color: "text-blue-300" },
+            { text: "You are a master!", icon: "🎓", color: "text-emerald-600" }
+        ];
+
+        // Games Data
+        const season1Data = [
+            { id: 1, title: "Crankin's Adventure", dev: "Keita Takahashi", desc: "A romance told through time manipulation. Use the crank to rewind and fast-forward Crankin's day.", genre: "Puzzle", crank: "Essential", week: "S1-W1", url: "https://play.date/games/crankins-time-travel-adventure/" },
+            { id: 2, title: "Whitewater Wipeout", dev: "Chuhai Labs", desc: "The ultimate surfing score-attack game. Use the crank to rotate your board for sick tricks.", genre: "Sports", crank: "Crucial", week: "S1-W1", url: "https://play.date/games/whitewater-wipeout/" },
+            { id: 3, title: "Lost Your Marbles", dev: "Sweet Baby Inc", desc: "A narrative marble-rolling adventure through a visual novel.", genre: "Narrative", crank: "Hybrid", week: "S1-W2", url: "https://play.date/games/lost-your-marbles/" },
+            { id: 4, title: "Pick Pack Pockle", dev: "Vlambeer", desc: "Strategic package packing in a busy warehouse.", genre: "Puzzle", crank: "Low", week: "S1-W2", url: "https://play.date/games/pick-pack-pockle/" },
+            { id: 5, title: "Spellcaste", dev: "Panic", desc: "Elemental combat using geometric spellcasting.", genre: "Action", crank: "High", week: "S1-W3", url: "https://play.date/games/spellcaste/" },
+            { id: 6, title: "Executive Golf DX", dev: "Dave Makes", desc: "Corporate golfing in a 2D arcade environment.", genre: "Sports", crank: "Low", week: "S1-W3", url: "https://play.date/games/executive-golf-dx/" },
+            { id: 7, title: "Questy Chess", dev: "Dadako", desc: "Chess but with RPG levels and equipment.", genre: "RPG", crank: "Medium", week: "S1-W4", url: "https://play.date/games/questy-chess/" },
+            { id: 8, title: "Casual Birder", dev: "Diego Garcia", desc: "Photograph birds to solve mysteries and help quirky locals.", genre: "Adventure", crank: "Focus", week: "S1-W4", url: "https://play.date/games/casual-birder/" },
+            { id: 9, title: "Hyper Meteor", dev: "Vertex Pop", desc: "A chaotic space shmup where you are a smashing ball.", genre: "Arcade", crank: "Medium", week: "S1-W5", url: "https://play.date/games/hyper-meteor/" },
+            { id: 10, title: "Zipper", dev: "Bennett Foddy", desc: "Tactical turn-based samurai slicing.", genre: "Tactics", crank: "Low", week: "S1-W5", url: "https://play.date/games/zipper/" },
+            { id: 11, title: "Echoic Memory", dev: "Samantha Gorman", desc: "Solve cases using sound and glitching memories.", genre: "Music", crank: "Hybrid", week: "S1-W6", url: "https://play.date/games/echoic-memory/" },
+            { id: 12, title: "Omaze", dev: "Gregory Avery-Weir", desc: "Navigate radial mazes that rotate with the crank.", genre: "Puzzle", crank: "Medium", week: "S1-W6", url: "https://play.date/games/omaze/" },
+            { id: 13, title: "DemonQuest 85", dev: "Lawrence / Wood", desc: "High school demon summoning simulation.", genre: "Visual Novel", crank: "Low", week: "S1-W7", url: "https://play.date/games/demonquest-85/" },
+            { id: 14, title: "Ratcheteer", dev: "Biffi / Fissolo", desc: "Top-down Zelda-style adventure with tools.", genre: "Adventure", crank: "Crucial", week: "S1-W7", url: "https://play.date/games/ratcheteer/" },
+            { id: 15, title: "Snak", dev: "Zach Gage", desc: "The classic game of snake but reimagined for Playdate.", genre: "Arcade", crank: "Hybrid", week: "S1-W8", url: "https://play.date/games/snak/" },
+            { id: 16, title: "Sasquatchers", dev: "Chuck Jordan", desc: "Turn-based photography tactics about finding Bigfoot.", genre: "Tactics", crank: "Low", week: "S1-W8", url: "https://play.date/games/sasquatchers/" },
+            { id: 17, title: "Inventory Hero", dev: "Panic", desc: "Reverse-RPG. Manage inventory while the hero fights.", genre: "Simulation", crank: "High", week: "S1-W9", url: "https://play.date/games/inventory-hero/" },
+            { id: 18, title: "Saturday Edition", dev: "Chris Cornell", desc: "Noir sci-fi mystery adventure.", genre: "Adventure", crank: "Low", week: "S1-W9", url: "https://play.date/games/saturday-edition/" },
+            { id: 19, title: "Forrest Byrnes", dev: "Nels Anderson", desc: "Escape the scary man in this 1-bit chase.", genre: "Platformer", crank: "Medium", week: "S1-W10", url: "https://play.date/games/forrest-byrnes-up-in-smoke/" },
+            { id: 20, title: "Battleship Godios", dev: "TPM", desc: "Horizontal arcade shooter action.", genre: "Shooter", crank: "Medium", week: "S1-W10", url: "https://play.date/games/battleship-godios/" },
+            { id: 21, title: "Bloom", dev: "RNG Party", desc: "Real-time florist simulation that happens over days.", genre: "Simulation", crank: "Medium", week: "S1-W11", url: "https://play.date/games/bloom/" },
+            { id: 22, title: "Star Sled", dev: "Panic", desc: "Grapple and zip through constellations.", genre: "Arcade", crank: "High", week: "S1-W11", url: "https://play.date/games/star-sled/" },
+            { id: 23, title: "Flipper Lifter", dev: "Panic", desc: "Elevator simulation madness.", genre: "Arcade", crank: "High", week: "S1-W12", url: "https://play.date/games/flipper-lifter/" },
+            { id: 24, title: "b360", dev: "Panic", desc: "Circular brick breaker using the crank.", genre: "Arcade", crank: "Essential", week: "S1-W12", url: "https://play.date/games/b360/" }
+        ];
+
+        const season2Data = [
+            { id: 25, title: "Dig Dig Dino!", dev: "Dom2D & Fáyer", desc: "Archeology puzzle game. Dig for fossils and solve the ancient grid.", genre: "Puzzle", crank: "High", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
+            { id: 26, title: "Fulcrum Defender", dev: "Subset Games", desc: "Turret defense from the creators of FTL.", genre: "Tactics", crank: "Medium", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
+            { id: 27, title: "Taria & Como", dev: "Popseed Studio", desc: "Physics-based swing platforming.", genre: "Platformer", crank: "Hybrid", week: "S2-W2", url: "https://play.date/games/seasons/two/" },
+            { id: 28, title: "Shadowgate PD", dev: "Pixel Ghost", desc: "Official point-and-click fantasy remake.", genre: "Adventure", crank: "Low", week: "S2-W2", url: "https://play.date/games/seasons/two/" },
+            { id: 29, title: "CatchaDiablos", dev: "Amano", desc: "Monster trapping action in the desert.", genre: "Action", crank: "Medium", week: "S2-W3", url: "https://play.date/games/seasons/two/" },
+            { id: 30, title: "Black Hole Havoc", dev: "Cosmic Bros", desc: "Gravity-based arcade chaos.", genre: "Arcade", crank: "High", week: "S2-W3", url: "https://play.date/games/seasons/two/" },
+            { id: 31, title: "Tiny Turnip", dev: "Luke Sanderson", desc: "Cozy gardening exploration.", genre: "Adventure", crank: "Low", week: "S2-W4", url: "https://play.date/games/seasons/two/" },
+            { id: 32, title: "Chance's Escape", dev: "Goloso Games", desc: "Quirky stealth adventure.", genre: "Stealth", crank: "Hybrid", week: "S2-W4", url: "https://play.date/games/seasons/two/" },
+            { id: 33, title: "Galactic Groove", dev: "Team Otto", desc: "Music rhythm action in deep space.", genre: "Music", crank: "High", week: "S2-W5", url: "https://play.date/games/seasons/two/" },
+            { id: 34, title: "Long Puppy", dev: "Jonas", desc: "Physics puzzle dog simulation.", genre: "Puzzle", crank: "Hybrid", week: "S2-W5", url: "https://play.date/games/seasons/two/" },
+            { id: 35, title: "Wheelsprung", dev: "Nino", desc: "High precision racing using the crank.", genre: "Racing", crank: "Essential", week: "S2-W6", url: "https://play.date/games/seasons/two/" },
+            { id: 36, title: "The Whiteout", dev: "Scenic Route", desc: "Frozen wasteland survival.", genre: "Survival", crank: "Medium", week: "S2-W6", url: "https://play.date/games/seasons/two/" },
+            { id: 63, title: "Blippo+", dev: "Telefantasy", desc: "The bonus mysterious season game.", genre: "Bonus", crank: "Essential", week: "S2-BONUS", url: "https://play.date/games/seasons/two/" }
+        ];
+
+        const catalogData = [
+            { id: 37, title: "Mars After Midnight", dev: "Lucas Pope", desc: "Run a neighborhood session for aliens. Lucas Pope's major Playdate entry.", genre: "Simulation", crank: "Moderate", week: "CATALOG", url: "https://play.date/games/mars-after-midnight/" },
+            { id: 38, title: "Root Bear", dev: "Arnie", desc: "The perfect beer pouring arcade fun. Highly addictive crank physics.", genre: "Arcade", crank: "Essential", week: "CATALOG", url: "https://play.date/games/root-bear/" },
+            { id: 39, title: "Puzzmo", dev: "Zach Gage", desc: "Daily thinking games like Wordle and Crossword on your handheld.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/puzzmo/" },
+            { id: 40, title: "Gun Trails", dev: "Madcap", desc: "High intensity bullet-hell arcade shmup. Performance perfection.", genre: "Shooter", crank: "High", week: "CATALOG", url: "https://play.date/games/gun-trails/" },
+            { id: 41, title: "Reel Steal", dev: "Serenity Forge", desc: "Fishing-based heist stealth game. Reel in the rewards.", genre: "Stealth", crank: "High", week: "CATALOG", url: "https://play.date/games/reel-steal/" },
+            { id: 42, title: "Direct Drive", dev: "DA-SUPA", desc: "A musical silent film rhythmic game. Unique presentation.", genre: "Music", crank: "Essential", week: "CATALOG", url: "https://play.date/games/direct-drive/" },
+            { id: 43, title: "Under the Castle", dev: "Community", desc: "A cozy rogue-lite dungeon crawler with deep upgrades.", genre: "Rogue-like", crank: "Medium", week: "CATALOG", url: "https://play.date/games/under-the-castle/" },
+            { id: 44, title: "Grand Tour", dev: "Community", desc: "Classic driving adventure across beautiful 1-bit landscapes.", genre: "Racing", crank: "Low", week: "CATALOG", url: "https://play.date/games/grand-tour/" },
+            { id: 45, title: "Pullfrog", dev: "Indie", desc: "Frog action meets block-pulling puzzles. Very addictive.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/pullfrog-playdate-edition/" },
+            { id: 46, title: "Skew", dev: "Indie", desc: "Infinite 3D tube racing technical marvel.", genre: "Racing", crank: "High", week: "CATALOG", url: "https://play.date/games/skew/" },
+            { id: 47, title: "G-Zero", dev: "Indie", desc: "F-Zero style racer with incredible pseudo-3D effects.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/g-zero/" },
+            { id: 48, title: "Tapeworm Disco", dev: "Lowtek", desc: "Disco-themed grid puzzle game with catchy bops.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/tapeworm-disco-fever/" },
+            { id: 49, title: "Resonant Tale", dev: "Indie", desc: "Classic RPG with musical exploration and Zelda vibes.", genre: "Adventure", crank: "Medium", week: "CATALOG", url: "https://play.date/games/resonant-tale/" },
+            { id: 50, title: "Eyeland", dev: "Community", desc: "Abstract island exploration adventure.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://play.date/games/eyeland/" },
+            { id: 51, title: "Comet", dev: "Indie", desc: "Beautiful narrative star platforming through constellations.", genre: "Platformer", crank: "Medium", week: "CATALOG", url: "https://play.date/games/comet/" },
+            { id: 52, title: "Spleen", dev: "Indie", desc: "Intense arcade action combat with unique 1-bit style.", genre: "Action", crank: "High", week: "CATALOG", url: "https://play.date/games/spleen/" },
+            { id: 53, title: "Gravity Express", dev: "Indie", desc: "Navigate ships through gravity-locked lunar tunnels.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://play.date/games/gravity-express/" },
+            { id: 54, title: "Life's Too Short", dev: "Indie", desc: "Ghostly point and click adventure story.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://play.date/games/lifes-too-short/" },
+            { id: 55, title: "Daily Driver", dev: "Indie", desc: "Precision top down 1-bit driving and racing.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/daily-driver/" },
+            { id: 56, title: "Shift", dev: "Indie", desc: "A minimalist puzzle shifter with clean mechanics.", genre: "Puzzle", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/shift/" },
+            { id: 57, title: "Post Hero", dev: "Community", desc: "A cozy mail delivery adventure in the suburbs.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/post-hero/" },
+            { id: 58, title: "Ollie Ollie", dev: "Indie", desc: "Skateboard arcade action. Kickflip into 1-bit.", genre: "Sports", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/ollie-ollie/" },
+            { id: 59, title: "Recommendation Nation", dev: "Indie", desc: "Quirky comedy puzzle game based on logic.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/recommendation-nation/" },
+            { id: 60, title: "Gener8", dev: "Indie", desc: "Procedural arcade action. Never the same game twice.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://shop.play.date/games/gener8/" },
+            { id: 61, title: "A Joke worth 0.99c", dev: "Indie", desc: "Exactly what it says on the tin. Funny!", genre: "Bonus", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/a-joke-thats-worth-099-cents/" },
+            { id: 62, title: "Wastebraver", dev: "Indie", desc: "Sci-fi rogue-like RPG adventure in the wasteland.", genre: "RPG", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/wastebraver/" }
+        ];
+
+        const allGames = [...season1Data, ...season2Data, ...catalogData];
+        let currentFactIndex = -1;
+
+        function init() {
+            populateGrid('season1Grid', season1Data, 'SEASON 1');
+            populateGrid('season2Grid', season2Data, 'SEASON 2');
+            populateGrid('catalogGrid', catalogData, 'CATALOG');
+            rotateFact();
+        }
+
+        function rotateFact() {
+            const factDisplay = document.getElementById('factDisplay');
+            const factIcon = document.getElementById('factIcon');
+            const factLabel = document.getElementById('factLabel');
+            let nextIndex;
+            do { nextIndex = Math.floor(Math.random() * facts.length); } while (nextIndex === currentFactIndex);
+            currentFactIndex = nextIndex;
+            const fact = facts[currentFactIndex];
+            factIcon.style.transform = "scale(1.2) rotate(10deg)";
+            setTimeout(() => {
+                factDisplay.innerText = fact.text;
+                factIcon.innerText = fact.icon;
+                factIcon.className = `w-16 h-16 bg-white border-4 border-black rounded-2xl flex items-center justify-center text-3xl shadow-lg transition-all duration-300 ${fact.color}`;
+                factLabel.innerText = `Mechanical Tip #${currentFactIndex + 1}`;
+                factIcon.style.transform = "scale(1) rotate(0deg)";
+            }, 150);
+        }
+
+        function generateBoxArt(game) {
+            const hash = game.id * 137;
+            const hue = hash % 360;
+            return `
+                <div class="box-art w-full h-full relative flex items-center justify-center p-4 text-white overflow-hidden" style="background-color: hsl(${hue}, 40%, 20%)">
+                    <div class="absolute inset-0 opacity-10" style="background-image: radial-gradient(circle, white 1px, transparent 1px); background-size: 15px 15px;"></div>
+                    <div class="z-10 text-center flex flex-col items-center">
+                        <div class="text-3xl mb-1">${getIcon(game.genre)}</div>
+                        <div class="text-[8px] font-black uppercase opacity-40">${game.dev}</div>
+                        <div class="text-[10px] font-black uppercase tracking-tight leading-none">${game.title}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function getIcon(genre) {
+            const icons = {
+                "Puzzle": "🧩", "Action": "⚔️", "Narrative": "📖", "Sports": "⚽", 
+                "RPG": "🧙", "Adventure": "🗺️", "Arcade": "🕹️", "Tactics": "♟️", 
+                "Music": "🎵", "Platformer": "🏃", "Simulation": "🏠", "Shooter": "🚀", 
+                "Survival": "❄️", "Stealth": "🕵️", "Racing": "🏁", "Bonus": "🎁", "Rogue-like": "💀", "Visual Novel": "📔"
+            };
+            return icons[genre] || "🎮";
+        }
+
+        function populateGrid(id, games, tag) {
+            const grid = document.getElementById(id);
+            grid.innerHTML = games.map(game => `
+                <div class="game-card bg-white p-3 rounded-2xl cursor-pointer" onclick="openGame(${game.id})">
+                    <div class="aspect-square rounded-xl mb-3 border-4 border-black overflow-hidden relative group">
+                        ${generateBoxArt(game)}
+                        <span class="absolute top-1 right-1 bg-black text-white text-[7px] px-1.5 py-0.5 rounded font-black uppercase tracking-widest border border-white/20">${tag}</span>
+                    </div>
+                    <h4 class="text-[11px] font-black uppercase truncate mb-0.5">${game.title}</h4>
+                    <div class="flex justify-between items-center">
+                        <span class="text-[8px] font-black uppercase opacity-40">${game.genre}</span>
+                        <span class="text-[8px] font-black underline hover:text-playdate">INFO</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+            const activeBtn = document.getElementById(`btn-${pageId}`);
+            if (activeBtn) activeBtn.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openGame(gameId) {
+            const game = allGames.find(g => g.id === gameId);
+            if (!game) return;
+            document.getElementById('modalTitle').innerText = game.title;
+            document.getElementById('modalDev').innerText = `By ${game.dev}`;
+            document.getElementById('modalDesc').innerText = game.desc;
+            document.getElementById('modalGenre').innerText = game.genre;
+            document.getElementById('modalCrank').innerText = game.crank;
+            document.getElementById('modalLabel').innerText = game.week;
+            document.getElementById('modalRank').innerText = `#${game.id.toString().padStart(2, '0')}`;
+            
+            // Set Link
+            const link = document.getElementById('modalLink');
+            link.href = game.url || "https://play.date";
+            link.innerText = "Visit Store Page";
+            
+            const visual = document.getElementById('screenshotVisual');
+            visual.innerHTML = `<span class="text-8xl">${getIcon(game.genre)}</span>`;
+            document.getElementById('gameModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeGame() {
+            document.getElementById('gameModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        function pickRandomGame() {
+            const crank = document.getElementById('randomCrank');
+            crank.classList.add('spinning');
+            setTimeout(() => {
+                crank.classList.remove('spinning');
+                const game = allGames[Math.floor(Math.random() * allGames.length)];
+                openGame(game.id);
+            }, 800);
+        }
+
+        function toggleMenu() {
+            const nav = document.querySelector('.md\\:flex');
+            nav.classList.toggle('hidden');
+            nav.classList.toggle('flex-col');
+            nav.classList.toggle('absolute');
+            nav.classList.toggle('top-20');
+            nav.classList.toggle('left-0');
+            nav.classList.toggle('w-full');
+            nav.classList.toggle('bg-white');
+            nav.classList.toggle('p-6');
+            nav.classList.toggle('border-b-4');
+            nav.classList.toggle('border-black');
+        }
+
+        window.addEventListener('scroll', () => {
+            const rotation = window.scrollY / 2;
+            const mainCrank = document.getElementById('mainCrankArm');
+            const navIcons = document.querySelectorAll('.nav-crank-icon');
+            if (mainCrank) mainCrank.style.transform = `rotate(${rotation}deg)`;
+            navIcons.forEach(icon => {
+                icon.style.transform = `rotate(${rotation}deg)`;
+            });
+        });
+
+        window.onload = init;
+    </script>
+</body>
+</html>
