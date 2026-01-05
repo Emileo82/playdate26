@@ -143,15 +143,16 @@
             text-transform: uppercase;
         }
 
+        /* Waveform Animation */
+        .waveform-bar {
+            animation: bounce 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes bounce {
+            from { height: 10px; }
+            to { height: 50px; }
+        }
+
         .perspective-1000 { perspective: 1000px; }
-        
-        .podcast-item {
-            transition: all 0.2s ease;
-        }
-        .podcast-item:hover {
-            background-color: #1a1a1a;
-            transform: translateX(5px);
-        }
     </style>
 </head>
 <body class="overflow-x-hidden">
@@ -159,7 +160,7 @@
     <!-- News Ticker -->
     <div class="ticker-wrap">
         <div class="ticker">
-            NEWS: Season 2 is now officially archiving... | CRANK UPDATE: Pivot hinge lubricated and ready for rapid rotation... | CATALOG SPOTLIGHT: Mars After Midnight continues to charm Martians worldwide... | PODCAST: The Official Playdate Podcast is live with Season 2 interviews! | SYSTEM STATUS: 1-Bit Graphics at 100% capacity... | UNLOCK: Find the hidden bunny icon for extra luck!
+            NEWS: Season 2 is officially arrived and archiving! | CRANK UPDATE: Hall-effect sensors active and ready for rotation... | CATALOG SPOTLIGHT: Mars After Midnight is a community sensation... | PODCAST: The Official Playdate Podcast explores the soul of the machine... | SYSTEM STATUS: 1-Bit Graphics at 100% capacity... | TIP: Crank hard, play harder!
         </div>
     </div>
 
@@ -180,7 +181,6 @@
         <div class="max-w-6xl mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3 cursor-pointer group" onclick="navigateTo('home')">
                 <div class="w-12 h-12 bg-playdate border-4 border-black rounded-xl flex items-center justify-center overflow-hidden transition-transform group-hover:rotate-12">
-                    <!-- Unofficial Bunny Mascot SVG (Cranky the Bunny) -->
                     <svg class="w-10 h-10" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M30 40C30 20 40 10 40 10L45 35" stroke="black" stroke-width="6" stroke-linecap="round"/>
                         <path d="M70 40C70 20 60 10 60 10L55 35" stroke="black" stroke-width="6" stroke-linecap="round"/>
@@ -221,7 +221,7 @@
             <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-16">
                 <div class="flex-1 text-center lg:text-left">
                     <div class="flex items-center justify-center lg:justify-start gap-4 mb-4">
-                        <div class="bg-black text-white px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest">Mainframe v2.3</div>
+                        <div class="bg-black text-white px-4 py-1 rounded-full font-black text-xs uppercase tracking-widest">Archive Mainframe v2.5</div>
                         <div class="text-2xl" title="Cranky the Bunny">🐰</div>
                     </div>
                     <h2 class="text-6xl md:text-8xl font-black uppercase mb-8 leading-[0.9] tracking-tighter italic">Crank up the <br><span class="text-white bg-black px-4 not-italic">Archive.</span></h2>
@@ -257,53 +257,69 @@
                 <div class="bg-white border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
                     <div class="text-6xl mb-4">📂</div>
                     <h4 class="text-3xl font-black uppercase mb-2">Archive: S1</h4>
-                    <p class="font-bold opacity-60 mb-6">24 free games delivered wirelessy. The original collection.</p>
+                    <p class="font-bold opacity-60 mb-6">24 free games delivered wirelessy. The original collection that started it all.</p>
                     <button onclick="navigateTo('season1')" class="font-black bg-playdate border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Explore Season 1</button>
                 </div>
                 <div class="bg-playdate border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
                     <div class="text-6xl mb-4">🆕</div>
                     <h4 class="text-3xl font-black uppercase mb-2">Archive: S2</h4>
-                    <p class="font-bold mb-6 italic text-sm">Season 2 titles have landed! 13 all-new games are here.</p>
+                    <p class="font-bold mb-6 italic text-sm">Season 2 titles have landed! 13 all-new games are here for download.</p>
                     <button onclick="navigateTo('season2')" class="font-black bg-black text-white border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Explore Season 2</button>
                 </div>
                 <div class="bg-white border-4 border-black p-10 rounded-[40px] shadow-[12px_12px_0px_rgba(0,0,0,1)] flex flex-col items-center text-center">
                     <div class="text-6xl mb-4">🎙️</div>
                     <h4 class="text-3xl font-black uppercase mb-2">The Audio</h4>
-                    <p class="font-bold opacity-60 mb-6">Listen to the official Playdate Podcast for dev stories.</p>
+                    <p class="font-bold opacity-60 mb-6">Listen to the official Playdate Podcast for behind-the-scenes dev stories.</p>
                     <a href="https://podcast.play.date/" target="_blank" class="font-black bg-playdate border-2 border-black px-6 py-2 rounded-full uppercase text-xs">Listen to Podcast</a>
                 </div>
             </div>
         </section>
 
-        <!-- Podcast Audio Station -->
-        <section class="bg-black text-white py-24 px-6 border-y-8 border-playdate">
-            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-12">
+        <!-- Podcast Audio Station (Expanded Graphics) -->
+        <section class="bg-black text-white py-24 px-6 border-y-8 border-playdate relative overflow-hidden">
+            <!-- Background Visuals -->
+            <div class="absolute inset-0 opacity-10 pointer-events-none flex items-center justify-center">
+                <svg class="w-full h-full" viewBox="0 0 800 400">
+                    <path d="M0 200 Q 200 100 400 200 T 800 200" stroke="white" stroke-width="2" fill="none" class="animate-pulse" />
+                </svg>
+            </div>
+            
+            <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-16 relative z-10">
                 <div class="flex-1 text-center md:text-left">
-                    <div class="text-playdate font-black text-xs uppercase mb-4 tracking-widest">Official Broadcast</div>
-                    <h3 class="text-5xl font-black uppercase mb-6 leading-none tracking-tighter">The Playdate <br>Podcast.</h3>
-                    <p class="text-xl opacity-70 mb-8">Go behind the scenes with Christa Mrgan as she explores the making of the world's crankiest handheld. Featuring interviews with Lucas Pope, Keita Takahashi, and the Panic team.</p>
+                    <div class="text-playdate font-black text-xs uppercase mb-4 tracking-widest">Boutique Broadcast</div>
+                    <h3 class="text-5xl md:text-7xl font-black uppercase mb-6 leading-none tracking-tighter">Tune into <br>the Crank.</h3>
+                    <p class="text-xl opacity-70 mb-10 max-w-lg mx-auto md:mx-0">Christa Mrgan hosts the official audio journey through the creation of Playdate. Deep dives with Lucas Pope, Keita Takahashi, and the Teenage Engineering design team.</p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-4">
-                        <a href="https://podcast.play.date/" target="_blank" class="bg-playdate text-black font-black px-8 py-4 rounded-xl hover:bg-white transition-all">Latest Episodes</a>
+                        <a href="https://podcast.play.date/" target="_blank" class="bg-playdate text-black font-black px-10 py-5 rounded-2xl hover:bg-white transition-all transform hover:-rotate-1 border-4 border-black">Listen on Podcast.Play.Date</a>
                     </div>
                 </div>
-                <div class="flex-1 w-full bg-playdate p-2 rounded-3xl border-4 border-white shadow-2xl">
-                    <div class="bg-black p-6 rounded-2xl flex flex-col gap-4">
-                        <a href="https://podcast.play.date/episodes/s2-official-launch/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
-                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#32</div>
-                            <div class="font-black uppercase text-sm">Season 2 officially lands!</div>
-                        </a>
-                        <a href="https://podcast.play.date/episodes/lucas-pope/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
-                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#31</div>
-                            <div class="font-black uppercase text-sm">Lucas Pope: Mars After Midnight</div>
-                        </a>
-                        <a href="https://podcast.play.date/episodes/zach-gage/" target="_blank" class="podcast-item flex items-center gap-4 border-b border-white/10 pb-4">
-                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#30</div>
-                            <div class="font-black uppercase text-sm">Zach Gage: Puzzmo & Daily Games</div>
-                        </a>
-                        <a href="https://podcast.play.date/episodes/teenage-engineering/" target="_blank" class="podcast-item flex items-center gap-4">
-                            <div class="w-12 h-12 bg-white text-black flex items-center justify-center font-black rounded-lg text-xs">#29</div>
-                            <div class="font-black uppercase text-sm">Hardware design with TE</div>
-                        </a>
+                
+                <div class="flex-1 w-full max-w-md">
+                    <!-- Stylized 1-Bit Audio Player Graphic -->
+                    <div class="bg-playdate border-8 border-white p-6 rounded-[50px] shadow-2xl rotate-2">
+                        <div class="bg-black p-8 rounded-[40px] flex flex-col items-center">
+                            <!-- Mascot Bunny Icon in Player -->
+                            <div class="mb-8">
+                                <svg width="100" height="100" viewBox="0 0 100 100" class="animate-bounce">
+                                    <path d="M30 40C30 20 40 10 40 10L45 35" stroke="white" stroke-width="4"/>
+                                    <path d="M70 40C70 20 60 10 60 10L55 35" stroke="white" stroke-width="4"/>
+                                    <rect x="25" y="35" width="50" height="45" rx="15" fill="white"/>
+                                    <circle cx="40" cy="50" r="4" fill="black"/>
+                                    <circle cx="60" cy="50" r="4" fill="black"/>
+                                    <circle cx="85" cy="60" r="8" fill="#ffcc00" stroke="white" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <!-- Visualizer Graphics -->
+                            <div class="flex items-end gap-1 h-12 mb-6">
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.1s"></div>
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.3s"></div>
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.2s"></div>
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.4s"></div>
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.1s"></div>
+                                <div class="waveform-bar w-3 bg-white rounded-full" style="animation-delay: 0.5s"></div>
+                            </div>
+                            <div class="text-[10px] font-black uppercase text-playdate tracking-[0.3em]">Now Broadcasting</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -325,7 +341,7 @@
     <div id="season2" class="page-content">
         <div class="bg-playdate py-20 px-6 text-center border-b-8 border-black">
             <h2 class="text-7xl font-black uppercase tracking-tighter">Season Two</h2>
-            <p class="font-black uppercase tracking-widest mt-4 italic">The Complete 2025 Archive</p>
+            <p class="font-black uppercase tracking-widest mt-4 italic">The Complete 13-Game Archive</p>
         </div>
         <div class="max-w-7xl mx-auto py-20 px-6">
             <div id="season2Grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"></div>
@@ -336,7 +352,7 @@
     <div id="catalog" class="page-content">
         <div class="bg-white py-20 px-6 text-center border-b-8 border-black">
             <h2 class="text-7xl font-black uppercase tracking-tighter italic">The Catalog</h2>
-            <p class="font-black uppercase tracking-widest text-gray-400">The Ultimate Boutique Storefront Selection</p>
+            <p class="font-black uppercase tracking-widest text-gray-400">The Boutique Storefront Selection</p>
         </div>
         <div class="max-w-7xl mx-auto py-20 px-6">
             <div id="catalogGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8"></div>
@@ -347,6 +363,7 @@
     <footer class="bg-gray-200 py-24 px-6 border-t-8 border-black">
         <div class="max-w-6xl mx-auto text-center">
             <div class="flex justify-center mb-8">
+                <!-- Footer Mascot Bunny -->
                 <svg width="60" height="60" viewBox="0 0 100 100">
                     <path d="M30 40C30 20 40 10 40 10" stroke="black" stroke-width="6"/>
                     <path d="M70 40C70 20 60 10 60 10" stroke="black" stroke-width="6"/>
@@ -360,7 +377,7 @@
                 <button onclick="navigateTo('season2')" class="hover:text-playdate">Season 2</button>
                 <button onclick="navigateTo('catalog')" class="hover:text-playdate">Catalog</button>
             </div>
-            <p class="text-gray-500 font-bold uppercase text-[10px] tracking-[0.3em]">Unofficial Playdate Gaming Hub. Created by fans, for fans. 🐰</p>
+            <p class="text-gray-500 font-bold uppercase text-[10px] tracking-[0.3em]">Unofficial Playdate Hub. Created by fans, for fans. 🐰</p>
         </div>
     </footer>
 
@@ -373,7 +390,7 @@
                         <h2 id="modalTitle" class="text-4xl font-black uppercase leading-[0.85] tracking-tighter mb-1">Title</h2>
                         <p id="modalDev" class="text-xs font-black uppercase opacity-50">Developer Name</p>
                     </div>
-                    <div id="modalLabel" class="bg-black text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase">S1-W1</div>
+                    <div id="modalLabel" class="bg-black text-white px-3 py-1 rounded-lg text-[10px] font-black uppercase">Archive Data</div>
                 </div>
                 <div class="screen-1bit w-full aspect-[400/240] rounded-xl border-4 border-black mb-6 flex items-center justify-center overflow-hidden relative">
                     <div id="screenshotVisual" class="scale-150 opacity-40"></div>
@@ -401,7 +418,7 @@
                     </div>
                 </div>
                 <div class="flex gap-4">
-                    <a id="modalLink" href="#" target="_blank" class="flex-1 bg-playdate text-black text-center font-black py-4 rounded-2xl uppercase tracking-widest hover:bg-black hover:text-white border-4 border-black transition-all">Go to Store</a>
+                    <a id="modalLink" href="#" target="_blank" class="flex-1 bg-playdate text-black text-center font-black py-4 rounded-2xl uppercase tracking-widest hover:bg-black hover:text-white border-4 border-black transition-all">Visit Store Page</a>
                     <button onclick="closeGame()" class="flex-1 bg-black text-white font-black py-4 rounded-2xl uppercase tracking-widest hover:bg-gray-800 transition-all border-4 border-black">Close</button>
                 </div>
             </div>
@@ -411,7 +428,7 @@
     <script>
         // Exactly 100 Mechanical Tips
         const facts = [
-            { text: "The Playdate crank is a hall-effect sensor, using magnets to detect rotation without physical contact!", icon: "🧲", color: "text-blue-500" },
+            { text: "The Playdate crank is a hall-effect sensor, meaning it uses magnets to detect rotation without physical contact!", icon: "🧲", color: "text-blue-500" },
             { text: "Panic is based in Portland, Oregon, and they're also the creators of Transmit and Firewatch!", icon: "🌲", color: "text-green-600" },
             { text: "The screen is a Sharp Memory LCD, which is highly reflective and doesn't have a backlight!", icon: "✨", color: "text-yellow-500" },
             { text: "Developers often use 'Pulp', a web-based game maker designed specifically for Playdate creators.", icon: "🎨", color: "text-purple-500" },
@@ -514,7 +531,7 @@
             { text: "You are a master!", icon: "🎓", color: "text-emerald-600" }
         ];
 
-        // Games Data
+        // Season 1: 24 Games
         const season1Data = [
             { id: 1, title: "Crankin's Adventure", dev: "Keita Takahashi", desc: "A romance told through time manipulation. Use the crank to rewind and fast-forward Crankin's day.", genre: "Puzzle", crank: "Essential", week: "S1-W1", url: "https://play.date/games/crankins-time-travel-adventure/" },
             { id: 2, title: "Whitewater Wipeout", dev: "Chuhai Labs", desc: "The ultimate surfing score-attack game. Use the crank to rotate your board for sick tricks.", genre: "Sports", crank: "Crucial", week: "S1-W1", url: "https://play.date/games/whitewater-wipeout/" },
@@ -537,11 +554,12 @@
             { id: 19, title: "Forrest Byrnes", dev: "Nels Anderson", desc: "Escape the scary man in this 1-bit chase.", genre: "Platformer", crank: "Medium", week: "S1-W10", url: "https://play.date/games/forrest-byrnes-up-in-smoke/" },
             { id: 20, title: "Battleship Godios", dev: "TPM", desc: "Horizontal arcade shooter action.", genre: "Shooter", crank: "Medium", week: "S1-W10", url: "https://play.date/games/battleship-godios/" },
             { id: 21, title: "Bloom", dev: "RNG Party", desc: "Real-time florist simulation that happens over days.", genre: "Simulation", crank: "Medium", week: "S1-W11", url: "https://play.date/games/bloom/" },
-            { id: 22, title: "Star Sled", dev: "Panic", desc: "Grapple and zip through constellations.", genre: "Arcade", crank: "High", week: "S1-W11", url: "https://play.date/games/star-sled/" },
+            { id: 22, title: "Star Sled", dev: "Panic", desc: "Grapple through constellations.", genre: "Arcade", crank: "High", week: "S1-W11", url: "https://play.date/games/star-sled/" },
             { id: 23, title: "Flipper Lifter", dev: "Panic", desc: "Elevator simulation madness.", genre: "Arcade", crank: "High", week: "S1-W12", url: "https://play.date/games/flipper-lifter/" },
             { id: 24, title: "b360", dev: "Panic", desc: "Circular brick breaker using the crank.", genre: "Arcade", crank: "Essential", week: "S1-W12", url: "https://play.date/games/b360/" }
         ];
 
+        // Season 2: 13 Games
         const season2Data = [
             { id: 25, title: "Dig Dig Dino!", dev: "Dom2D & Fáyer", desc: "Archeology puzzle game. Dig for fossils and solve the ancient grid.", genre: "Puzzle", crank: "High", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
             { id: 26, title: "Fulcrum Defender", dev: "Subset Games", desc: "Turret defense from the creators of FTL.", genre: "Tactics", crank: "Medium", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
@@ -558,33 +576,34 @@
             { id: 63, title: "Blippo+", dev: "Telefantasy", desc: "The bonus mysterious season game.", genre: "Bonus", crank: "Essential", week: "S2-BONUS", url: "https://play.date/games/seasons/two/" }
         ];
 
+        // Catalog: Expanded List
         const catalogData = [
-            { id: 37, title: "Mars After Midnight", dev: "Lucas Pope", desc: "Run a neighborhood session for aliens. Lucas Pope's major Playdate entry.", genre: "Simulation", crank: "Moderate", week: "CATALOG", url: "https://play.date/games/mars-after-midnight/" },
+            { id: 37, title: "Mars After Midnight", dev: "Lucas Pope", desc: "Run a neighborhood session for aliens. Lucas Pope's major entry.", genre: "Simulation", crank: "Moderate", week: "CATALOG", url: "https://play.date/games/mars-after-midnight/" },
             { id: 38, title: "Root Bear", dev: "Arnie", desc: "The perfect beer pouring arcade fun. Highly addictive crank physics.", genre: "Arcade", crank: "Essential", week: "CATALOG", url: "https://play.date/games/root-bear/" },
             { id: 39, title: "Puzzmo", dev: "Zach Gage", desc: "Daily thinking games like Wordle and Crossword on your handheld.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/puzzmo/" },
             { id: 40, title: "Gun Trails", dev: "Madcap", desc: "High intensity bullet-hell arcade shmup. Performance perfection.", genre: "Shooter", crank: "High", week: "CATALOG", url: "https://play.date/games/gun-trails/" },
             { id: 41, title: "Reel Steal", dev: "Serenity Forge", desc: "Fishing-based heist stealth game. Reel in the rewards.", genre: "Stealth", crank: "High", week: "CATALOG", url: "https://play.date/games/reel-steal/" },
             { id: 42, title: "Direct Drive", dev: "DA-SUPA", desc: "A musical silent film rhythmic game. Unique presentation.", genre: "Music", crank: "Essential", week: "CATALOG", url: "https://play.date/games/direct-drive/" },
             { id: 43, title: "Under the Castle", dev: "Community", desc: "A cozy rogue-lite dungeon crawler with deep upgrades.", genre: "Rogue-like", crank: "Medium", week: "CATALOG", url: "https://play.date/games/under-the-castle/" },
-            { id: 44, title: "Grand Tour", dev: "Community", desc: "Classic driving adventure across beautiful 1-bit landscapes.", genre: "Racing", crank: "Low", week: "CATALOG", url: "https://play.date/games/grand-tour/" },
-            { id: 45, title: "Pullfrog", dev: "Indie", desc: "Frog action meets block-pulling puzzles. Very addictive.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/pullfrog-playdate-edition/" },
+            { id: 44, title: "Grand Tour", dev: "Community", desc: "Classic driving adventure landscapes.", genre: "Racing", crank: "Low", week: "CATALOG", url: "https://play.date/games/grand-tour/" },
+            { id: 45, title: "Pullfrog", dev: "Indie", desc: "Frog action block-pulling puzzles.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/pullfrog-playdate-edition/" },
             { id: 46, title: "Skew", dev: "Indie", desc: "Infinite 3D tube racing technical marvel.", genre: "Racing", crank: "High", week: "CATALOG", url: "https://play.date/games/skew/" },
-            { id: 47, title: "G-Zero", dev: "Indie", desc: "F-Zero style racer with incredible pseudo-3D effects.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/g-zero/" },
-            { id: 48, title: "Tapeworm Disco", dev: "Lowtek", desc: "Disco-themed grid puzzle game with catchy bops.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/tapeworm-disco-fever/" },
-            { id: 49, title: "Resonant Tale", dev: "Indie", desc: "Classic RPG with musical exploration and Zelda vibes.", genre: "Adventure", crank: "Medium", week: "CATALOG", url: "https://play.date/games/resonant-tale/" },
+            { id: 47, title: "G-Zero", dev: "Indie", desc: "F-Zero style racer with pseudo-3D.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/g-zero/" },
+            { id: 48, title: "Tapeworm Disco", dev: "Lowtek", desc: "Disco-themed grid puzzle game.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/tapeworm-disco-fever/" },
+            { id: 49, title: "Resonant Tale", dev: "Indie", desc: "Classic RPG with musical exploration.", genre: "Adventure", crank: "Medium", week: "CATALOG", url: "https://play.date/games/resonant-tale/" },
             { id: 50, title: "Eyeland", dev: "Community", desc: "Abstract island exploration adventure.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://play.date/games/eyeland/" },
-            { id: 51, title: "Comet", dev: "Indie", desc: "Beautiful narrative star platforming through constellations.", genre: "Platformer", crank: "Medium", week: "CATALOG", url: "https://play.date/games/comet/" },
-            { id: 52, title: "Spleen", dev: "Indie", desc: "Intense arcade action combat with unique 1-bit style.", genre: "Action", crank: "High", week: "CATALOG", url: "https://play.date/games/spleen/" },
-            { id: 53, title: "Gravity Express", dev: "Indie", desc: "Navigate ships through gravity-locked lunar tunnels.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://play.date/games/gravity-express/" },
+            { id: 51, title: "Comet", dev: "Indie", desc: "Beautiful narrative star platforming.", genre: "Platformer", crank: "Medium", week: "CATALOG", url: "https://play.date/games/comet/" },
+            { id: 52, title: "Spleen", dev: "Indie", desc: "Intense arcade action combat.", genre: "Action", crank: "High", week: "CATALOG", url: "https://play.date/games/spleen/" },
+            { id: 53, title: "Gravity Express", dev: "Indie", desc: "Thrust-based tunnel navigation.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://play.date/games/gravity-express/" },
             { id: 54, title: "Life's Too Short", dev: "Indie", desc: "Ghostly point and click adventure story.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://play.date/games/lifes-too-short/" },
-            { id: 55, title: "Daily Driver", dev: "Indie", desc: "Precision top down 1-bit driving and racing.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/daily-driver/" },
-            { id: 56, title: "Shift", dev: "Indie", desc: "A minimalist puzzle shifter with clean mechanics.", genre: "Puzzle", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/shift/" },
-            { id: 57, title: "Post Hero", dev: "Community", desc: "A cozy mail delivery adventure in the suburbs.", genre: "Adventure", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/post-hero/" },
-            { id: 58, title: "Ollie Ollie", dev: "Indie", desc: "Skateboard arcade action. Kickflip into 1-bit.", genre: "Sports", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/ollie-ollie/" },
-            { id: 59, title: "Recommendation Nation", dev: "Indie", desc: "Quirky comedy puzzle game based on logic.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/recommendation-nation/" },
-            { id: 60, title: "Gener8", dev: "Indie", desc: "Procedural arcade action. Never the same game twice.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://shop.play.date/games/gener8/" },
-            { id: 61, title: "A Joke worth 0.99c", dev: "Indie", desc: "Exactly what it says on the tin. Funny!", genre: "Bonus", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/a-joke-thats-worth-099-cents/" },
-            { id: 62, title: "Wastebraver", dev: "Indie", desc: "Sci-fi rogue-like RPG adventure in the wasteland.", genre: "RPG", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/wastebraver/" }
+            { id: 55, title: "Shift", dev: "Indie", desc: "A minimalist puzzle shifter.", genre: "Puzzle", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/shift/" },
+            { id: 56, title: "Ollie Ollie", dev: "Indie", desc: "Skateboard arcade action.", genre: "Sports", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/ollie-ollie/" },
+            { id: 57, title: "Pocket Pets", dev: "Indie", desc: "Virtual pet simulation.", genre: "Simulation", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/pocket-pets/" },
+            { id: 58, title: "Wastebraver", dev: "Indie", desc: "Sci-fi rogue-like RPG adventure.", genre: "RPG", crank: "Medium", week: "CATALOG", url: "https://shop.play.date/games/wastebraver/" },
+            { id: 59, title: "Recommendation", dev: "Indie", desc: "Quirky comedy puzzle game.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://shop.play.date/games/recommendation-nation/" },
+            { id: 60, title: "Gener8", dev: "Indie", desc: "Procedural arcade action.", genre: "Arcade", crank: "High", week: "CATALOG", url: "https://shop.play.date/games/gener8/" },
+            { id: 61, title: "A Balanced Diet", dev: "Lucas Pope", desc: "Balance food using the crank.", genre: "Simulation", crank: "High", week: "CATALOG", url: "https://shop.play.date/games/a-balanced-diet/" },
+            { id: 62, title: "Core Fault", dev: "Indie", desc: "Deep survival action.", genre: "Survival", crank: "High", week: "CATALOG", url: "https://play.date/games/core-fault/" }
         ];
 
         const allGames = [...season1Data, ...season2Data, ...catalogData];
@@ -677,10 +696,8 @@
             document.getElementById('modalLabel').innerText = game.week;
             document.getElementById('modalRank').innerText = `#${game.id.toString().padStart(2, '0')}`;
             
-            // Set Link
             const link = document.getElementById('modalLink');
             link.href = game.url || "https://play.date";
-            link.innerText = "Visit Store Page";
             
             const visual = document.getElementById('screenshotVisual');
             visual.innerHTML = `<span class="text-8xl">${getIcon(game.genre)}</span>`;
