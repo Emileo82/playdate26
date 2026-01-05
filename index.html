@@ -290,7 +290,7 @@
                     <h3 class="text-5xl md:text-7xl font-black uppercase mb-6 leading-none tracking-tighter">Tune into <br>the Crank.</h3>
                     <p class="text-xl opacity-70 mb-10 max-w-lg mx-auto md:mx-0">Christa Mrgan hosts the official audio journey through the creation of Playdate. Deep dives with Lucas Pope, Keita Takahashi, and the Teenage Engineering design team.</p>
                     <div class="flex flex-wrap justify-center md:justify-start gap-4">
-                        <a href="https://podcast.play.date/" target="_blank" class="bg-playdate text-black font-black px-10 py-5 rounded-2xl hover:bg-white transition-all transform hover:-rotate-1 border-4 border-black">Listen on Podcast.Play.Date</a>
+                        <a href="https://podcast.play.date/" target="_blank" class="bg-playdate text-black font-black px-10 py-5 rounded-2xl hover:bg-white transition-all transform hover:-rotate-1 border-4 border-black shadow-lg">Listen on Podcast.Play.Date</a>
                     </div>
                 </div>
                 
@@ -370,6 +370,16 @@
                     <rect x="25" y="35" width="50" height="45" rx="15" fill="black"/>
                 </svg>
             </div>
+            
+            <!-- NEW: Contact Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-black uppercase mb-4 tracking-tighter italic">Want to chat about games?</h3>
+                <div class="flex justify-center gap-4">
+                    <a href="https://www.instagram.com/Vasco1782" target="_blank" class="bg-white border-4 border-black px-6 py-2 rounded-xl font-black uppercase text-xs hover:bg-playdate transition-all">Instagram</a>
+                    <a href="mailto:Chappell.leo@gmail.com" class="bg-black text-white border-4 border-black px-6 py-2 rounded-xl font-black uppercase text-xs hover:bg-playdate hover:text-black transition-all">Email Me</a>
+                </div>
+            </div>
+
             <h1 class="text-5xl font-black uppercase mb-8">Stay Yellow.</h1>
             <div class="flex justify-center gap-8 mb-12 flex-wrap font-black uppercase text-sm">
                 <button onclick="navigateTo('home')" class="hover:text-playdate">Home</button>
@@ -482,13 +492,8 @@
             { text: "Take breaks! Every 20 minutes, look at something 20 feet away.", icon: "☕", color: "text-orange-600" },
             { text: "You are the heart of the Playdate community.", icon: "❤️", color: "text-red-600" },
             { text: "The Playdate 'Logo' font is a custom variant of Roobert.", icon: "🔤", color: "text-black" },
-            { text: "Panic worked on the hardware for over 4 years before reveal.", icon: "⏳", color: "text-zinc-500" },
-            { text: "The Playdate community is one of the friendliest in gaming.", icon: "🤝", color: "text-pink-400" },
-            { text: "The standby clock can be customized with Faces.", icon: "🕙", color: "text-indigo-600" },
             { text: "The Hall Effect sensor works by measuring magnetic field strength.", icon: "🔬", color: "text-cyan-600" },
-            { text: "Every Playdate console is a development kit out of the box.", icon: "🛠️", color: "text-amber-600" },
             { text: "The speaker is Mono but headphones support Stereo.", icon: "🔊", color: "text-violet-500" },
-            { text: "Pulp uses a 'tile-based' approach for game design.", icon: "🧱", color: "text-orange-600" },
             { text: "The crank handle folds flush into the side of the device.", icon: "📎", color: "text-gray-400" },
             { text: "Playdate supports high-fidelity WAV audio files.", icon: "🎵", color: "text-indigo-600" },
             { text: "The battery can last for 8 hours of active play.", icon: "🔋", color: "text-green-500" },
@@ -507,31 +512,40 @@
             { text: "The Playdate font is called Roobert.", icon: "🔤", color: "text-gray-900" },
             { text: "You can charge and play at the same time.", icon: "⚡", color: "text-cyan-500" },
             { text: "The device features a mono speaker.", icon: "🔊", color: "text-zinc-600" },
-            { text: "The crank is the soul of the machine.", icon: "💛", color: "text-playdate" },
-            { text: "Playdate games are .pdx folders.", icon: "📂", color: "text-amber-700" },
-            { text: "The 'A' button is for action.", icon: "🔘", color: "text-slate-800" },
-            { text: "There are no ads on the platform.", icon: "🚫", color: "text-red-500" },
-            { text: "The Catalog launched in 2023.", icon: "🛍️", color: "text-pink-500" },
-            { text: "The crank sensor is very precise.", icon: "🎯", color: "text-red-400" },
-            { text: "The unofficial mascot is Cranky.", icon: "🐰", color: "text-playdate" },
-            { text: "Playdate supports tile-mapping.", icon: "🗺️", color: "text-emerald-500" },
-            { text: "The Hall Effect sensor is reliable.", icon: "🛡️", color: "text-blue-400" },
-            { text: "The console is light.", icon: "⚖️", color: "text-gray-300" },
-            { text: "Firewatch funded this.", icon: "🔥", color: "text-orange-600" },
-            { text: "TE designed the look.", icon: "🇸🇪", color: "text-blue-300" },
-            { text: "The hinge is sturdy.", icon: "🔄", color: "text-yellow-700" },
-            { text: "Lua is easy to learn.", icon: "🌙", color: "text-blue-900" },
-            { text: "C is for power.", icon: "⌨️", color: "text-teal-600" },
             { text: "The Hub is for fans.", icon: "🐰", color: "text-playdate" },
             { text: "Cranking is mechanical.", icon: "⚙️", color: "text-gray-500" },
             { text: "Screen is reflective.", icon: "🪞", color: "text-blue-200" },
             { text: "USB-C is universal.", icon: "⚡", color: "text-cyan-500" },
-            { text: "Mono speaker is loud.", icon: "🔊", color: "text-violet-500" },
             { text: "Playdate is tiny.", icon: "🤏", color: "text-blue-300" },
-            { text: "You are a master!", icon: "🎓", color: "text-emerald-600" }
+            { text: "You are a master!", icon: "🎓", color: "text-emerald-600" },
+            { text: "Swedish Designers TE made the OP-1.", icon: "🇸🇪", color: "text-blue-400" },
+            { text: "Playdate's 'B' button is for 'Back'.", icon: "🔙", color: "text-red-500" },
+            { text: "Dedicated Menu button on the face.", icon: "🍔", color: "text-orange-500" },
+            { text: "Fold the crank to lock it.", icon: "🔒", color: "text-zinc-600" },
+            { text: "Screen consumes zero power when static.", icon: "🔋", color: "text-green-600" },
+            { text: "Rotating 3D objects with the crank.", icon: "🧊", color: "text-blue-600" },
+            { text: "Wireless OS updates.", icon: "📶", color: "text-sky-500" },
+            { text: "1-bit constraint is a dev favorite.", icon: "✍️", color: "text-teal-500" },
+            { text: "Over 100 curated Catalog games.", icon: "📖", color: "text-pink-600" },
+            { text: "Secret codes in some games.", icon: "🔑", color: "text-yellow-700" },
+            { text: "Side rocker for volume.", icon: "🔊", color: "text-indigo-500" },
+            { text: "Display is non-backlit.", icon: "💡", color: "text-yellow-300" },
+            { text: "Magnetic field rotation detection.", icon: "🧲", color: "text-red-400" },
+            { text: "Console, clock, or radio.", icon: "📻", color: "text-gray-600" },
+            { text: "Officially 'Panic Yellow'.", icon: "🎨", color: "text-playdate" },
+            { text: "Develop on Chromebook via Pulp.", icon: "💻", color: "text-blue-700" },
+            { text: "CPU is fast for 1-bit.", icon: "⚡", color: "text-amber-500" },
+            { text: "Creative constraints breed art.", icon: "🎨", color: "text-purple-600" },
+            { text: "Every Season 1 game was a surprise.", icon: "🎁", color: "text-red-500" },
+            { text: "View device info in settings.", icon: "ℹ️", color: "text-blue-500" },
+            { text: "Simulator GIF recording.", icon: "🎞️", color: "text-purple-400" },
+            { text: "Cranky Bunny says: keep turning!", icon: "🐰", color: "text-playdate" },
+            { text: "Sunlight readable display.", icon: "☀️", color: "text-orange-500" },
+            { text: "Mechanical Tip #99: Break time!", icon: "☕", color: "text-brown-600" },
+            { text: "Mechanical Tip #100: You are the heart.", icon: "❤️", color: "text-red-600" }
         ];
 
-        // Season 1: 24 Games
+        // Games Data (Season 1, Season 2, Catalog)
         const season1Data = [
             { id: 1, title: "Crankin's Adventure", dev: "Keita Takahashi", desc: "A romance told through time manipulation. Use the crank to rewind and fast-forward Crankin's day.", genre: "Puzzle", crank: "Essential", week: "S1-W1", url: "https://play.date/games/crankins-time-travel-adventure/" },
             { id: 2, title: "Whitewater Wipeout", dev: "Chuhai Labs", desc: "The ultimate surfing score-attack game. Use the crank to rotate your board for sick tricks.", genre: "Sports", crank: "Crucial", week: "S1-W1", url: "https://play.date/games/whitewater-wipeout/" },
@@ -559,7 +573,6 @@
             { id: 24, title: "b360", dev: "Panic", desc: "Circular brick breaker using the crank.", genre: "Arcade", crank: "Essential", week: "S1-W12", url: "https://play.date/games/b360/" }
         ];
 
-        // Season 2: 13 Games
         const season2Data = [
             { id: 25, title: "Dig Dig Dino!", dev: "Dom2D & Fáyer", desc: "Archeology puzzle game. Dig for fossils and solve the ancient grid.", genre: "Puzzle", crank: "High", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
             { id: 26, title: "Fulcrum Defender", dev: "Subset Games", desc: "Turret defense from the creators of FTL.", genre: "Tactics", crank: "Medium", week: "S2-W1", url: "https://play.date/games/seasons/two/" },
@@ -576,7 +589,6 @@
             { id: 63, title: "Blippo+", dev: "Telefantasy", desc: "The bonus mysterious season game.", genre: "Bonus", crank: "Essential", week: "S2-BONUS", url: "https://play.date/games/seasons/two/" }
         ];
 
-        // Catalog: Expanded List
         const catalogData = [
             { id: 37, title: "Mars After Midnight", dev: "Lucas Pope", desc: "Run a neighborhood session for aliens. Lucas Pope's major entry.", genre: "Simulation", crank: "Moderate", week: "CATALOG", url: "https://play.date/games/mars-after-midnight/" },
             { id: 38, title: "Root Bear", dev: "Arnie", desc: "The perfect beer pouring arcade fun. Highly addictive crank physics.", genre: "Arcade", crank: "Essential", week: "CATALOG", url: "https://play.date/games/root-bear/" },
@@ -586,7 +598,7 @@
             { id: 42, title: "Direct Drive", dev: "DA-SUPA", desc: "A musical silent film rhythmic game. Unique presentation.", genre: "Music", crank: "Essential", week: "CATALOG", url: "https://play.date/games/direct-drive/" },
             { id: 43, title: "Under the Castle", dev: "Community", desc: "A cozy rogue-lite dungeon crawler with deep upgrades.", genre: "Rogue-like", crank: "Medium", week: "CATALOG", url: "https://play.date/games/under-the-castle/" },
             { id: 44, title: "Grand Tour", dev: "Community", desc: "Classic driving adventure landscapes.", genre: "Racing", crank: "Low", week: "CATALOG", url: "https://play.date/games/grand-tour/" },
-            { id: 45, title: "Pullfrog", dev: "Indie", desc: "Frog action block-pulling puzzles.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/pullfrog-playdate-edition/" },
+            { id: 45, title: "Pullfrog", dev: "Indie", desc: "Frog action block-pulling puzzles. Very addictive.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/pullfrog-playdate-edition/" },
             { id: 46, title: "Skew", dev: "Indie", desc: "Infinite 3D tube racing technical marvel.", genre: "Racing", crank: "High", week: "CATALOG", url: "https://play.date/games/skew/" },
             { id: 47, title: "G-Zero", dev: "Indie", desc: "F-Zero style racer with pseudo-3D.", genre: "Racing", crank: "Medium", week: "CATALOG", url: "https://play.date/games/g-zero/" },
             { id: 48, title: "Tapeworm Disco", dev: "Lowtek", desc: "Disco-themed grid puzzle game.", genre: "Puzzle", crank: "Low", week: "CATALOG", url: "https://play.date/games/tapeworm-disco-fever/" },
@@ -693,7 +705,7 @@
             document.getElementById('modalDesc').innerText = game.desc;
             document.getElementById('modalGenre').innerText = game.genre;
             document.getElementById('modalCrank').innerText = game.crank;
-            document.getElementById('modalLabel').innerText = game.week;
+            document.getElementById('modalLabel').innerText = `ID #${game.id.toString().padStart(2, '0')}`;
             document.getElementById('modalRank').innerText = `#${game.id.toString().padStart(2, '0')}`;
             
             const link = document.getElementById('modalLink');
